@@ -120,8 +120,8 @@ class SewioWebSocketClient_v2:
             except Exception as e:
                 print(f"Error: {e}")
             if self.running:
-                print("Attempting to reconnect in {} seconds...".format(self.reconnect_delay))
-                time.sleep(self.reconnect_delay)  # 재연결 전 딜레이
+                print("Attempting to reconnect in {} seconds...".format(os.getenv('RECONNECT_DELAY')))
+                time.sleep(os.getenv('RECONNECT_DELAY'))  # 재연결 전 딜레이
 
 
 """
