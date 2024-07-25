@@ -1,0 +1,65 @@
+
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      IMAGE_TAG: ${{ github.run_number }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        env:
+          IMAGE_TAG: ${{ github.run_number }}
+        with:
+          context: .
+          push: true
+          tags: minjuncho/falcon-distributor-kafka:${{ env.IMAGE_TAG }}
+        id: docker_build
+
+      - name: Output the image tag
+        run: echo "IMAGE_TAG=${{ steps.docker_build.outputs.digest }}" >> $GITHUB_ENV
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out infra repository
+        uses: actions/checkout@v2
+        with:
+          repository: "NetAiFalcon/infra"
+          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          fetch-depth: 0
+
+      - name: List directory contents
+        run: ls -R
+
+      - name: Update Kubernetes Manifests
+        env:
+          IMAGE_TAG: ${{ github.run_number }}
+        run: |
+          sed -i 's|image:.*falcon-distributor-kafka.*|image: falcon-distributor-kafka:${{ env.IMAGE_TAG }}|' service/distributor/values.yaml
+
+      - name: commit and push
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "Deploying image ${{ env.IMAGE_TAG }}"
+          git push origin main
