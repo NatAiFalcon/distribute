@@ -53,7 +53,7 @@ class SewioWebSocketClient_v2:
         with open(config_path, 'r') as file:
             self.config = json.load(file)
         self.url = url
-        self.reconnect_delay = int(os.getenv('RECONNECT_DELAY')) # 재연결 시도 간격(초)
+        self.reconnect_delay = os.getenv('RECONNECT_DELAY') # 재연결 시도 간격(초)
         self.lock = threading.Lock()
         self.data_callback = data_callback # DB 저장용 콜백함수
         self.running = True
