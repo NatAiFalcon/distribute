@@ -29,8 +29,8 @@ load_dotenv()
 
 class DataManager:
     def __init__(self, config_path):
-        self.config_path = config_path
-        self.load_config()
+        # self.config_path = config_path
+        # self.load_config()
 
         self.producer = None
         self.topic_name = None
@@ -39,9 +39,9 @@ class DataManager:
 
 
 
-    def load_config(self):
-        with open(self.config_path, 'r') as file:
-            self.config = json.load(file)
+    # def load_config(self):
+    #     with open(self.config_path, 'r') as file:
+    #         self.config = json.load(file)
 
     def db_connect(self):
         try:
@@ -92,7 +92,7 @@ class DataManager:
 
 def main():
     url = "ws://10.76.20.88/sensmapserver/api"
-    config_path = os.getenv('CONFIG_PATH', '/home/user/distributor-kafka/config.json')
+    config_path = os.getenv('CONFIG_PATH', 'config.json')
 
     manager = DataManager(config_path)
 
