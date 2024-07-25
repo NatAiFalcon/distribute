@@ -89,7 +89,7 @@ class DataManager:
 
 def main():
     url = "ws://10.76.20.88/sensmapserver/api"
-    config_path = os.getenv('CONFIG_PATH', '/home/user/falcon/falcon/uwb/config.json')
+    config_path = os.getenv('CONFIG_PATH', '/home/user/distributor-kafka/config.json')
 
     manager = DataManager(config_path)
 

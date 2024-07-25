@@ -46,7 +46,7 @@ import signal
 class SewioWebSocketClient_v2:
 
     def __init__(self, url, data_callback=None):
-        config_path = os.getenv('CONFIG_PATH', '/home/user/falcon/falcon/uwb/config.json')
+        config_path = os.getenv('CONFIG_PATH', '/home/user/distributor-kafka/config.json')
         with open(config_path, 'r') as file:
             self.config = json.load(file)
         self.url = url
