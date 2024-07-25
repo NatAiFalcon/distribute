@@ -38,11 +38,14 @@ import threading
 import numpy as np
 import os
 import signal
-
+from dotenv import load_dotenv
 """
 데이터 처리 로직은 UWB_gateway로 이전, 해당 코드는 오르지 데이터 적재만
 
 """
+
+load_dotenv()
+
 class SewioWebSocketClient_v2:
 
     def __init__(self, url, data_callback=None):
@@ -50,7 +53,7 @@ class SewioWebSocketClient_v2:
         with open(config_path, 'r') as file:
             self.config = json.load(file)
         self.url = url
-        self.reconnect_delay = self.config['reconnect_delay']  # 재연결 시도 간격(초)
+        self.reconnect_delay = int(os.getenv('RECONNECT_DELAY')) # 재연결 시도 간격(초)
         self.lock = threading.Lock()
         self.data_callback = data_callback # DB 저장용 콜백함수
         self.running = True
@@ -93,7 +96,8 @@ class SewioWebSocketClient_v2:
 
     def on_open(self, ws):
         print("Opened connection")
-        subscribe_message = f'{{"headers": {{"X-ApiKey": "{self.config["X-ApiKey"]}"}}, "method": "subscribe", "resource": "/feeds/"}}'
+        x_apikey = os.getenv('X_APIKEY')
+        subscribe_message = f'{{"headers": {{"X-ApiKey": "{x_apikey}"}}, "method": "subscribe", "resource": "/feeds/"}}'
         ws.send(subscribe_message)
 
     def stop(self):

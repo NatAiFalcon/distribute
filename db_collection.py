@@ -18,12 +18,15 @@ import psycopg2
 from Websocket_raw import  SewioWebSocketClient_v2
 import os
 from kafka import KafkaProducer
-
+from dotenv import load_dotenv
 """
 
 MVC 신경 안쓰고 오르지 Sewio RLTS 에서 데이터 넘어오면 DB만 적재하도록 작성된 코드
 
 """
+
+load_dotenv()
+
 class DataManager:
     def __init__(self, config_path):
         self.config_path = config_path
@@ -43,11 +46,11 @@ class DataManager:
     def db_connect(self):
         try:
             self.conn = psycopg2.connect(
-                dbname=self.config['db_name'],
-                user=self.config['db_user'],
-                password=self.config['db_password'],
-                host=self.config['db_host'],
-                port=self.config['db_port']
+                dbname=os.getenv('DB_NAME'),
+                user=os.getenv('DB_USER'),
+                password=os.getenv('DB_PASSWORD'),
+                host=os.getenv('DB_HOST'),
+                port=os.getenv('DB_PORT'),
             )
             self.cursor = self.conn.cursor()
             print("Database connection successfully established.")
@@ -56,9 +59,9 @@ class DataManager:
 
     def kafka_connect(self):
         try:
-            self.producer = KafkaProducer(bootstrap_servers=self.config['kafka_server'],
+            self.producer = KafkaProducer(bootstrap_servers=os.getenv('KAFKA_SERVER'),
                                           value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-            self.topic_name = self.config['topic_name']
+            self.topic_name = os.getenv('TOPIC_NAME')
 
             print("Kafka connection successfully established.")
         except Exception as e:
