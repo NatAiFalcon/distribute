@@ -9,7 +9,6 @@ ENV CONFIG_PATH /app/config.json
 
 # requirements.txt 파일을 컨테이너로 복사
 COPY requirements.txt /app/
-COPY config.json /app/
 # 의존성 설치
 RUN pip install --no-cache-dir -r requirements.txt
 
