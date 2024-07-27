@@ -68,6 +68,7 @@ class SewioWebSocketClient_v2:
     def on_message(self, ws, message):
         #print("Received:", message)
         data = json.loads(message)
+        print("data : ", data)
         tag_id = data["body"]["id"]
         posX = float(data["body"]["datastreams"][0]["current_value"].replace('%', ''))
         posY = float(data["body"]["datastreams"][1]["current_value"].replace('%', ''))
