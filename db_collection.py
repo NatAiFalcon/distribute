@@ -60,7 +60,7 @@ class DataManager:
 
     def kafka_connect(self):
         try:
-            print("\nkafka_connect called in db_collection")
+        
             self.producer = KafkaProducer(bootstrap_servers=os.getenv('KAFKA_SERVER'),
                                           value_serializer=lambda v: json.dumps(v).encode('utf-8'))
             self.topic_name = os.getenv('TOPIC_NAME')
@@ -70,7 +70,7 @@ class DataManager:
             print(f"Failed to connect to Kafka: {e}")
 
     def send_data_to_kafka(self, tag_id, posX, posY):
-        print("\nsend_data_to_kafka called in db_collection")
+        
         # 데이터를 JSON 문자열로 변환합니다.
         coord_data = {'id': tag_id, 'latitude': posX, 'longitude': posY}
         self.producer.send(self.topic_name, coord_data)
@@ -81,7 +81,7 @@ class DataManager:
             self.producer.close()
 
     def store_data_in_db(self, tag_id, posX, posY, timestamp, anchor_info):
-        print("\nstore_data_in_db called in db_ceollection")
+        
         query = """
         INSERT INTO uwb_raw (tag_id, x_position, y_position, timestamp, anchor_info) VALUES (%s, %s, %s, %s, %s)
         """

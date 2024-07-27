@@ -66,10 +66,10 @@ class SewioWebSocketClient_v2:
         self.stop()
 
     def on_message(self, ws, message):
-        print("\non_message called in websocket")
-        print("Received:", message)
+
+
         data = json.loads(message)
-        print("data : ", data)
+
         tag_id = data["body"]["id"]
         posX = float(data["body"]["datastreams"][0]["current_value"].replace('%', ''))
         posY = float(data["body"]["datastreams"][1]["current_value"].replace('%', ''))
@@ -100,10 +100,7 @@ class SewioWebSocketClient_v2:
         print("Opened connection")
         x_apikey = os.getenv('X_APIKEY')
 
-        print("X-APIkey : ", x_apikey)
-        print(type(x_apikey))
-        subscribe_message = f'{{"headers": {{"X-ApiKey": "{x_apikey}"}}, "method": "subscribe", "resource": "/feeds/"}}'
-        print("\nsubscribe_message : ", subscribe_message)
+        subscribe_message = f'{{"headers": {{"X-ApiKey": "{str(x_apikey)}"}}, "method": "subscribe", "resource": "/feeds/"}}'
 
         ws.send(subscribe_message)
 
