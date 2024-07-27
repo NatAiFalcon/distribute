@@ -98,6 +98,8 @@ class SewioWebSocketClient_v2:
     def on_open(self, ws):
         print("Opened connection")
         x_apikey = os.getenv('X_APIKEY')
+        print("X-APIkey : ", x_apikey)
+        print(type(x_apikey))
         subscribe_message = f'{{"headers": {{"X-ApiKey": "{x_apikey}"}}, "method": "subscribe", "resource": "/feeds/"}}'
         ws.send(subscribe_message)
 
