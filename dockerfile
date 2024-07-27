@@ -17,4 +17,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # 애플리케이션 실행
-CMD ["python", "db_collection.py"]
+CMD ["python3", "db_collection.py"]
